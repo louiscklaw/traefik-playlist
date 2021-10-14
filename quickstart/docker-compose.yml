@@ -1,9 +1,10 @@
-version: '3'
+version: "3"
 
 services:
   reverse-proxy:
+    # https://doc.traefik.io/traefik/reference/static-configuration/env/
     # The official v2 Traefik docker image
-    image: traefik:v2.2
+    image: traefik:v2.5
     # Enables the web UI and tells Traefik to listen to docker
     command: --api.insecure=true --providers.docker
     ports:
@@ -14,9 +15,11 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+      # - ./traefik.toml:/etc/traefik/traefik.toml
 
   whoami:
     # A container that exposes an API to show its IP address
     image: containous/whoami
     labels:
-      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+      - traefik.enable=true
+      - traefik.http.routers.whoami.rule=Host(`whoami.example.com`)
