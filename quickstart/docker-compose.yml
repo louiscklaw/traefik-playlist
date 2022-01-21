@@ -11,7 +11,7 @@ services:
       # The HTTP port
       - '80:80'
       # The Web UI (enabled by --api.insecure=true)
-      - '8080:8080'
+      - '8081:8080'
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
@@ -33,7 +33,7 @@ services:
 
   node_helloworld:
     # A container that exposes an API to show its IP address
-    image: containous/whoami
+    build: /home/logic/_workspace/traefik-playlist/quickstart/docker/node_helloworld
     labels:
       - traefik.enable=true
       - traefik.http.routers.node_helloworld.rule=Host(`node_helloworld`)
