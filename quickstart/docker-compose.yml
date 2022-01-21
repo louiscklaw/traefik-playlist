@@ -30,3 +30,10 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.whoami_localhost.rule=Host(`localhost`)
+
+  node_helloworld:
+    # A container that exposes an API to show its IP address
+    image: containous/whoami
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.node_helloworld.rule=Host(`node_helloworld`)
