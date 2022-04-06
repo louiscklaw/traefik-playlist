@@ -22,4 +22,4 @@ services:
     image: containous/whoami
     labels:
       - traefik.enable=true
-      - traefik.http.routers.whoami.rule=Host(`whoami.example.com`)
+      - traefik.http.routers.whoami.rule=Host(`whoami.iamon99.com`)

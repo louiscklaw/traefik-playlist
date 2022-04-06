@@ -2,8 +2,14 @@
 
 set -ex
 
-docker-compose up -d reverse-proxy
+# docker network create web || true
 
-docker-compose up -d whoami
+docker-compose kill
+docker-compose rm -f
+docker-compose down -v --remove-orphans
+
+docker-compose build
+
+docker-compose up -d
 
 # docker-compose up -d --scale whoami=2
