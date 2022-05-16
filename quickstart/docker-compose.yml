@@ -33,6 +33,8 @@ services:
 
   node_helloworld:
     # A container that exposes an API to show its IP address
+    ports:
+      - '81:80'
     build: ./docker/node_helloworld
     labels:
       - traefik.enable=true
