@@ -1,42 +1,18 @@
-version: '3'
-
+version: '2'
 services:
-  reverse-proxy:
-    # https://doc.traefik.io/traefik/reference/static-configuration/env/
-    # The official v2 Traefik docker image
-    image: traefik:v2.5
-    # Enables the web UI and tells Traefik to listen to docker
-    command: --api.insecure=true --providers.docker --log.filePath=/logs/traefik.log
+  traefik:
+    image: traefik:1.5.2
+    command: --web --docker --docker.domain=docker.localhost --logLevel=INFO
     ports:
-      # The HTTP port
       - '80:80'
-      # The Web UI (enabled by --api.insecure=true)
-      - '8081:8080'
+      - '8080:8080'
     volumes:
-      # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-      # - ./traefik.toml:/etc/traefik/traefik.toml
-      - ./volumes/reverse-proxy:/logs
-
-  # whoami:
-  #   # A container that exposes an API to show its IP address
-  #   image: containous/whoami
-  #   labels:
-  #     - traefik.enable=true
-  #     - traefik.http.routers.whoami.rule=Host(`whoami.example.com`)
-
-  # whoami_localhost:
-  #   # A container that exposes an API to show its IP address
-  #   image: containous/whoami
-  #   labels:
-  #     - traefik.enable=true
-  #     - traefik.http.routers.whoami_localhost.rule=Host(`localhost`)
-
-  node_helloworld:
-    # A container that exposes an API to show its IP address
-    ports:
-      - '81:80'
-    build: ./docker/node_helloworld
+      - /dev/null:/traefik.toml
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.node_helloworld.rule=Host(`node_helloworld`)
+      - 'traefik.enable=false'
+  whoami:
+    image: emilevauge/whoami
+    labels:
+      - 'traefik.backend=whoami'
+      - 'traefik.frontend.rule=Host:whoami.docker.localhost'
