@@ -14,7 +14,7 @@ services:
       - '8081:8080'
     volumes:
       # So that Traefik can listen to the Docker events
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./volumes/reverse-proxy/var/run/docker.sock:/var/run/docker.sock
       # - ./traefik.toml:/etc/traefik/traefik.toml
     volumes:
       - ./volumes/reverse-proxy:/logs
