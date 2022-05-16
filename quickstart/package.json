@@ -10,7 +10,7 @@
     "docker_compose_build": "docker-compose build",
     "docker_compose_kill": "docker-compose kill",
     "docker_compose_down": "docker-compose down --remove-orphans && npm run docker_network_prune",
-    "docker_compose_up": "docker network create web && docker-compose up ",
+    "docker_compose_up": "docker network create traefik-proxy-network && docker-compose up ",
     "docker_rebuild": "npm run docker_compose_pull && npm run docker_compose_build && npm run docker_compose_kill && npm run docker_compose_down && npm run docker_compose_up",
     "gitUpdate": "git pull && git add . && git commit -m \"update\" && git push",
     "gitSync": "git fetch --all && git pull "

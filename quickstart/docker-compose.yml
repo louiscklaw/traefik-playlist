@@ -27,3 +27,8 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.node_helloworld.rule=Host(`node_helloworld.iamon99.com`)
+
+networks:
+  default:
+    external:
+      name: traefik-proxy-network
