@@ -19,3 +19,10 @@ services:
     image: traefik/whoami
     labels:
       - 'traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)'
+
+  node_helloworld:
+    # A container that exposes an API to show its IP address
+    build: /home/logic/_workspace/traefik-playlist/quickstart/docker/node_helloworld
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.node_helloworld.rule=Host(`node_helloworld`)
