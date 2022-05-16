@@ -19,6 +19,7 @@ services:
     image: traefik/whoami
     labels:
       - 'traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)'
+      - 'traefik.http.routers.whoami.rule=Host(`whoami.iamon99.com`)'
 
   node_helloworld:
     # A container that exposes an API to show its IP address
