@@ -41,6 +41,7 @@ services:
 
       - traefik.http.middlewares.to-https.redirectscheme.scheme=https
       # - traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_USER}:${TRAEFIK_PASSWORD_HASH}
+      - 'traefik.http.routers.whoami.rule=Host(`traefik.iamon99.com`)'
 
   whoami:
     # A container that exposes an API to show its IP address
