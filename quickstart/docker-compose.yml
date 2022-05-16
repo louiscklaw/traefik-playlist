@@ -16,4 +16,4 @@ services:
     image: emilevauge/whoami
     labels:
       - 'traefik.backend=whoami'
-      - 'traefik.frontend.rule=Host:whoami.iamon99.com'
+      - 'traefik.frontend.rule=Host:node_helloworld.iamon99.com'
