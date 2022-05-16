@@ -2,7 +2,7 @@ version: '2'
 services:
   traefik:
     image: traefik:1.5.2
-    command: --web --docker --docker.domain=iamon99.com --log.filePath=/logs/traefik.log --logLevel=INFO
+    command: --web --docker --docker.domain=iamon99.com --logLevel=INFO
     ports:
       - '80:80'
       - '8080:8080'
