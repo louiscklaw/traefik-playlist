@@ -5,9 +5,14 @@ services:
     # The official v2 Traefik docker image
     image: traefik:v2.6
     # Enables the web UI and tells Traefik to listen to docker
+
     command:
       - --api.insecure=true
       - --providers.docker
+
+      - --entryPoints.web.address=:80
+      - --entryPoints.websecure.address=:443
+
       # Enable ACME (Let's Encrypt): automatic SSL.
 
       # Email address used for registration.
@@ -121,6 +126,7 @@ services:
       - '443:443'
       # The Web UI (enabled by --api.insecure=true)
       - '8080:8080'
+
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
