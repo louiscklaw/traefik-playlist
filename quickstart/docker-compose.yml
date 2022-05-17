@@ -25,12 +25,21 @@ services:
 
   whoami:
     image: 'traefik/whoami'
-    container_name: 'simple-service'
+    container_name: 'whoami_root'
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.whoami.rule=Host(`whoami.iamon99.com`)'
-      - 'traefik.http.routers.whoami.entrypoints=websecure'
-      - 'traefik.http.routers.whoami.tls.certresolver=myresolver'
+      - 'traefik.http.routers.whoami_root.rule=Host(`whoami.iamon99.com`)'
+      - 'traefik.http.routers.whoami_root.entrypoints=websecure'
+      - 'traefik.http.routers.whoami_root.tls.certresolver=myresolver'
+
+  whoami_demo:
+    image: 'traefik/whoami'
+    container_name: 'whoami_demo'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.whoami_demo.rule=Host(`whoami.demo.iamon99.com`)'
+      - 'traefik.http.routers.whoami_demo.entrypoints=websecure'
+      - 'traefik.http.routers.whoami_demo.tls.certresolver=myresolver'
 
   # node_helloworld:
   #   # A container that exposes an API to show its IP address
