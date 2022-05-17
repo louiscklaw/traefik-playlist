@@ -32,14 +32,14 @@ services:
       - 'traefik.http.routers.whoami.entrypoints=websecure'
       - 'traefik.http.routers.whoami.tls.certresolver=myresolver'
 
-  node_helloworld:
-    # A container that exposes an API to show its IP address
-    build: ./docker/node_helloworld
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.node_helloworld.rule=Host(`nodehelloworld.iamon99.com`)'
-      - 'traefik.http.routers.node_helloworld.entrypoints=websecure'
-      - 'traefik.http.routers.node_helloworld.tls.certresolver=myresolver'
+  # node_helloworld:
+  #   # A container that exposes an API to show its IP address
+  #   build: ./docker/node_helloworld
+  #   labels:
+  #     - 'traefik.enable=true'
+  #     - 'traefik.http.routers.node_helloworld.rule=Host(`nodehelloworld.iamon99.com`)'
+  #     - 'traefik.http.routers.node_helloworld.entrypoints=websecure'
+  #     - 'traefik.http.routers.node_helloworld.tls.certresolver=myresolver'
 
 networks:
   default:
