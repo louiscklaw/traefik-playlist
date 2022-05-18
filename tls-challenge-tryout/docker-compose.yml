@@ -31,3 +31,8 @@ services:
       - 'traefik.http.routers.whoami.rule=Host(`whoami.iamon99.com`)'
       - 'traefik.http.routers.whoami.entrypoints=websecure'
       - 'traefik.http.routers.whoami.tls.certresolver=myresolver'
+
+networks:
+  default:
+    external:
+      name: traefik-proxy-network
