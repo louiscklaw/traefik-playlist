@@ -40,7 +40,7 @@ services:
     restart: always
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.sub_domain_whoami.rule=Host(`whoami.demo.iamon99.com`)'
+      - 'traefik.http.routers.sub_domain_whoami.rule=Host(`demo.iamon99.com`)'
       - 'traefik.http.routers.sub_domain_whoami.entrypoints=websecure'
       - 'traefik.http.routers.sub_domain_whoami.tls.certresolver=myresolver'
 
