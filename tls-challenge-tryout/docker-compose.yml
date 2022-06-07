@@ -34,6 +34,16 @@ services:
       - 'traefik.http.routers.whoami.entrypoints=websecure'
       - 'traefik.http.routers.whoami.tls.certresolver=myresolver'
 
+  sub_domain_whoami:
+    image: 'traefik/whoami'
+    container_name: 'simple-service'
+    restart: always
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.sub_domain_whoami.rule=Host(`whoami.demo.iamon99.com`)'
+      - 'traefik.http.routers.sub_domain_whoami.entrypoints=websecure'
+      - 'traefik.http.routers.sub_domain_whoami.tls.certresolver=myresolver'
+
 networks:
   default:
     external:
