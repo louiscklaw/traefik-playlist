@@ -9,9 +9,9 @@
     "docker_compose_pull": "docker-compose pull",
     "docker_compose_build": "docker-compose build",
     "docker_compose_kill": "docker-compose kill",
-    "docker_compose_down": "docker-compose down --remove-orphans && npm run docker_network_prune",
+    "docker_compose_rm": "docker-compose rm -s -v -f",
     "docker_compose_up": "docker network create traefik-proxy-network || true && docker-compose up -d",
-    "docker_rebuild": "npm run docker_compose_pull && npm run docker_compose_build && npm run docker_compose_kill && npm run docker_compose_down && npm run docker_compose_up",
+    "docker_rebuild": "yarn docker_compose_build && yarn docker_compose_rm && yarn docker_compose_up",
     "gitUpdate": "git add . && git commit -m \"update tls-challenge-tryout,\" && git pull && git push",
     "gitSync": "git fetch --all && git pull "
   },
