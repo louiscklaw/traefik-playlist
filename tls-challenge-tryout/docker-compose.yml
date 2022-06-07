@@ -6,7 +6,7 @@ services:
   traefik:
     image: 'traefik:v2.6'
     container_name: 'traefik'
-    restart: always
+    restart: unless-stopped
     command:
       # - '--log.level=DEBUG'
       - '--api.insecure=true'
@@ -27,12 +27,14 @@ services:
   whoami:
     image: 'traefik/whoami'
     # container_name: 'simple-service'
-    restart: always
+    restart: unless-stopped
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.whoami.rule=Host(`whoami.iamon99.com`)'
       - 'traefik.http.routers.whoami.entrypoints=websecure'
       - 'traefik.http.routers.whoami.tls.certresolver=myresolver'
+    depends_on:
+      - traefik
 
 networks:
   default:
