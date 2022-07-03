@@ -1,0 +1,47 @@
+# https://doc.traefik.io/traefik/user-guides/docker-compose/acme-tls/
+
+version: '3.3'
+
+services:
+  traefik:
+    image: 'traefik:v2.8'
+    container_name: 'traefik'
+    restart: unless-stopped
+    command:
+      # - '--log.level=DEBUG'
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+      - '--certificatesresolvers.myresolver.acme.tlschallenge=true'
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - '--certificatesresolvers.myresolver.acme.email=${EMAIL}'
+      - '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
+    volumes:
+      - './volumes/letsencrypt:/letsencrypt'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+
+  whoami:
+    image: 'traefik/whoami'
+    restart: unless-stopped
+    labels:
+      - 'traefik.enable=true'
+      - "traefik.http.routers.whoami-http.rule=Host(`whoami.iamon99.com`)"
+      - "traefik.http.routers.whoami-http.entrypoints=web"
+      - "traefik.http.routers.whoami-http.middlewares=whoami-https"
+      - "traefik.http.middlewares.whoami-https.redirectscheme.scheme=https"
+      - 'traefik.http.routers.whoami.rule=Host(`whoami.iamon99.com`)'
+      - 'traefik.http.routers.whoami.entrypoints=websecure'
+      - 'traefik.http.routers.whoami.tls.certresolver=myresolver'
+    depends_on:
+      - traefik
+
+networks:
+  default:
+    external:
+      name: traefik-proxy-network
