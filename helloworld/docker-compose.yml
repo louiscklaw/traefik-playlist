@@ -3,7 +3,7 @@ version: '3'
 services:
   reverse-proxy:
     # The official v2 Traefik docker image
-    image: traefik:v2.6
+    image: traefik:v2.8
     # Enables the web UI and tells Traefik to listen to docker
     command: --api.insecure=true --providers.docker
     ports:
@@ -14,6 +14,7 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+
   whoami:
     # A container that exposes an API to show its IP address
     image: traefik/whoami
