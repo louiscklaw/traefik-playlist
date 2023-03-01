@@ -31,13 +31,28 @@ services:
     restart: unless-stopped
     labels:
       - 'traefik.enable=true'
-      - "traefik.http.routers.whoami-http.rule=Host(`whoami.iamon99.com`)"
-      - "traefik.http.routers.whoami-http.entrypoints=web"
-      - "traefik.http.routers.whoami-http.middlewares=whoami-https"
-      - "traefik.http.middlewares.whoami-https.redirectscheme.scheme=https"
+      - 'traefik.http.routers.whoami-http.rule=Host(`whoami.iamon99.com`)'
+      - 'traefik.http.routers.whoami-http.entrypoints=web'
+      - 'traefik.http.routers.whoami-http.middlewares=whoami-https'
+      - 'traefik.http.middlewares.whoami-https.redirectscheme.scheme=https'
       - 'traefik.http.routers.whoami.rule=Host(`whoami.iamon99.com`)'
       - 'traefik.http.routers.whoami.entrypoints=websecure'
       - 'traefik.http.routers.whoami.tls.certresolver=myresolver'
+    depends_on:
+      - traefik
+
+  whoami-louislabs:
+    image: 'traefik/whoami'
+    restart: unless-stopped
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.whoami-louislabs-http.rule=Host(`whoami.louislabs.com`)'
+      - 'traefik.http.routers.whoami-louislabs-http.entrypoints=web'
+      - 'traefik.http.routers.whoami-louislabs-http.middlewares=whoami-louislabs-https'
+      - 'traefik.http.middlewares.whoami-louislabs-https.redirectscheme.scheme=https'
+      - 'traefik.http.routers.whoami-louislabs-https.rule=Host(`whoami.louislabs.com`)'
+      - 'traefik.http.routers.whoami-louislabs-https.entrypoints=websecure'
+      - 'traefik.http.routers.whoami-louislabs-https.tls.certresolver=myresolver'
     depends_on:
       - traefik
 
