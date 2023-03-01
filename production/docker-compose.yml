@@ -31,13 +31,13 @@ services:
     restart: unless-stopped
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.whoami-http.rule=Host(`whoami.iamon99.com`)'
-      - 'traefik.http.routers.whoami-http.entrypoints=web'
-      - 'traefik.http.routers.whoami-http.middlewares=whoami-https'
-      - 'traefik.http.middlewares.whoami-https.redirectscheme.scheme=https'
-      - 'traefik.http.routers.whoami.rule=Host(`whoami.iamon99.com`)'
-      - 'traefik.http.routers.whoami.entrypoints=websecure'
-      - 'traefik.http.routers.whoami.tls.certresolver=myresolver'
+      - 'traefik.http.routers.whoami-iamon99-http.rule=Host(`whoami.iamon99.com`)'
+      - 'traefik.http.routers.whoami-iamon99-http.entrypoints=web'
+      - 'traefik.http.routers.whoami-iamon99-http.middlewares=whoami-iamon99-https'
+      - 'traefik.http.middlewares.whoami-iamon99-https.redirectscheme.scheme=https'
+      - 'traefik.http.routers.whoami-iamon99-https.rule=Host(`whoami.iamon99.com`)'
+      - 'traefik.http.routers.whoami-iamon99-https.entrypoints=websecure'
+      - 'traefik.http.routers.whoami-iamon99-https.tls.certresolver=myresolver'
     depends_on:
       - traefik
 
