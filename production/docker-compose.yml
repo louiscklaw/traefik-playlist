@@ -14,8 +14,8 @@ services:
       - '--providers.docker.exposedbydefault=false'
       - '--entrypoints.web.address=:80'
       - '--entrypoints.websecure.address=:443'
-      - '--entrypoints.ws.address=:8080'
-      - '--entrypoints.wss.address=:8443'
+      # - '--entrypoints.ws.address=:8080'
+      # - '--entrypoints.wss.address=:8443'
       - '--certificatesresolvers.myresolver.acme.tlschallenge=true'
       #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - '--certificatesresolvers.myresolver.acme.email=${EMAIL}'
@@ -23,8 +23,8 @@ services:
     ports:
       - '80:80'
       - '443:443'
-      - '8080:8080'
-      - '8443:8443'
+  #     # - '8080:8080'
+  #     # - '8443:8443'
     volumes:
       - './volumes/letsencrypt:/letsencrypt'
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
@@ -41,8 +41,8 @@ services:
       - 'traefik.http.routers.whoami-iamon99-https.rule=Host(`whoami.iamon99.com`)'
       - 'traefik.http.routers.whoami-iamon99-https.entrypoints=websecure'
       - 'traefik.http.routers.whoami-iamon99-https.tls.certresolver=myresolver'
-    depends_on:
-      - traefik
+    # depends_on:
+    #   - traefik
 
   whoami-louislabs:
     image: 'traefik/whoami'
@@ -56,8 +56,8 @@ services:
       - 'traefik.http.routers.whoami-louislabs-https.rule=Host(`whoami.louislabs.com`)'
       - 'traefik.http.routers.whoami-louislabs-https.entrypoints=websecure'
       - 'traefik.http.routers.whoami-louislabs-https.tls.certresolver=myresolver'
-    depends_on:
-      - traefik
+    # depends_on:
+    #   - traefik
 
 networks:
   default:
