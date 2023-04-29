@@ -10,7 +10,6 @@ services:
       - '--global.checkNewVersion=true'
       - '--global.sendAnonymousUsage=false'
       - '--api.insecure=true'
-
       - '--providers.docker=true'
       - '--providers.docker.exposedbydefault=false'
 
