@@ -60,6 +60,23 @@ services:
     # depends_on:
     #   - traefik
 
+  wss-test-host:
+    build: wss-test-host
+    ports:
+      - 3000:3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.helloworld-ws.rule=Host(`wss.louislabs.com`)"
+      - 'traefik.http.routers.helloworld-ws.entrypoints=web'
+      - 'traefik.http.routers.helloworld-ws.middlewares=helloworld-wss'
+      - 'traefik.http.middlewares.helloworld-wss.redirectscheme.scheme=https'
+
+      - 'traefik.http.routers.helloworld-wss.rule=Host(`wss.louislabs.com`)'
+      - 'traefik.http.routers.helloworld-wss.entrypoints=websecure'
+      - 'traefik.http.routers.helloworld-wss.tls.certresolver=myresolver'
+
+      - "traefik.tcp.services.helloworld-wss.loadbalancer.server.port=3000"
+
 networks:
   default:
     external:
