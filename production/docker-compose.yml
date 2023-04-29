@@ -9,8 +9,8 @@ services:
     restart: unless-stopped
     command:
       - '--log.level=INFO'
-      - "--global.checkNewVersion=true"
-      - "--global.sendAnonymousUsage=false"
+      - '--global.checkNewVersion=true'
+      - '--global.sendAnonymousUsage=false'
       - '--api.insecure=true'
 
       - '--providers.docker=true'
@@ -23,7 +23,7 @@ services:
       #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - '--certificatesresolvers.myresolver.acme.email=${EMAIL}'
       - '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json'
-      
+
     ports:
       - '80:80'
       - '443:443'
