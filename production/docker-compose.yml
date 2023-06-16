@@ -6,20 +6,25 @@ services:
     container_name: 'traefik'
     restart: unless-stopped
     command:
-      - '--log.level=INFO'
-      - '--global.checkNewVersion=true'
-      - '--global.sendAnonymousUsage=false'
-      - '--api.insecure=true'
-      - '--providers.docker=true'
-      - '--providers.docker.exposedbydefault=false'
+      - "--log.level=INFO"
+      - "--global.checkNewVersion=true"
+      - "--global.sendAnonymousUsage=false"
 
-      - '--entrypoints.web.address=:80'
-      - '--entrypoints.websecure.address=:443'
+      - "--api=true"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
 
-      - '--certificatesresolvers.myresolver.acme.tlschallenge=true'
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      
+      - "--entrypoints.websecure.address=:443"
+
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
       #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - '--certificatesresolvers.myresolver.acme.email=${EMAIL}'
-      - '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json'
+      - "--certificatesresolvers.myresolver.acme.email=${EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
 
     ports:
       - '80:80'
