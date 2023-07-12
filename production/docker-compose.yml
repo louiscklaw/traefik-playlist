@@ -78,6 +78,7 @@ services:
       # NOTE: container serving 3000 port
       - "traefik.http.services.helloworld-ws.loadbalancer.server.port=3000"
 
+  # TODO: 2023-Jul-12, remove me as no encrypted traffic between cloudflare and my server anymore.
   #     - "traefik.http.routers.helloworld-ws.middlewares=helloworld-wss"
   #     - "traefik.http.middlewares.helloworld-wss.redirectscheme.scheme=https"
 
