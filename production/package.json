@@ -12,11 +12,13 @@
     "docker_compose_rm": "docker compose rm -s -v -f",
     "docker_compose_up": "docker network create traefik-proxy-network || true && docker compose up -d",
     "docker_rebuild": "docker compose up -d --build",
-    "docker_stop":"docker compose kill",
-    "gitUpdate": "git add . && git commit -m \"update production,\" && git pull && git push",
-    "gitSync": "git fetch --all && git pull "
+    "docker_stop": "docker compose kill",
+    "gitUpdate": "git add . && git commit -m \"update traefik-production,\""
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  }
 }

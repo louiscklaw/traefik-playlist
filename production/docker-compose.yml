@@ -5,65 +5,66 @@ services:
     image: 'traefik:v2.10'
     container_name: 'traefik'
     restart: unless-stopped
-    command:
-      - "--log.level=INFO"
-      - "--global.checkNewVersion=true"
-      - "--global.sendAnonymousUsage=false"
-
-      - "--api=true"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      
-      - "--entrypoints.websecure.address=:443"
-
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myresolver.acme.email=${EMAIL}"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-
-    ports:
-      - '80:80'
-      - '443:443'
-      - '8080:8080'
+    environment:
+      # https://go-acme.github.io/lego/dns/cloudflare/#credentials
+      - CLOUDFLARE_EMAIL=louiscklaw@gmail.com
+      - CLOUDFLARE_DNS_API_TOKEN=832e9ced6f77bc77b6c304e3e0085f009aa4e
 
     volumes:
-      - './volumes/letsencrypt:/letsencrypt'
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      # - "./volumes/letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-  whoami-iamon99:
-    image: 'traefik/whoami'
-    restart: unless-stopped
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.whoami-iamon99-http.rule=Host(`whoami.iamon99.com`)'
-      - 'traefik.http.routers.whoami-iamon99-http.entrypoints=web'
-      - 'traefik.http.routers.whoami-iamon99-http.middlewares=whoami-iamon99-https'
-      - 'traefik.http.middlewares.whoami-iamon99-https.redirectscheme.scheme=https'
-      - 'traefik.http.routers.whoami-iamon99-https.rule=Host(`whoami.iamon99.com`)'
-      - 'traefik.http.routers.whoami-iamon99-https.entrypoints=websecure'
-      - 'traefik.http.routers.whoami-iamon99-https.tls.certresolver=myresolver'
-    # depends_on:
-    #   - traefik
+
+    ports:
+      # servicing port http 80, https 443,
+      - "80:80"
+      - "443:443"
+      # traefik ui, http://192.168.10.61:8080
+      - "8080:8080"
+      
+    command:
+      - --log.level=DEBUG
+      - --global.checkNewVersion=true
+      - --global.sendAnonymousUsage=false
+
+      - --api=true
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+
+      - --entrypoints.web.address=:80
+
+      # NOTE: it is related to the SSL/TLS configuration on cloudflare side, 
+      # NOTE: the selected "Encrypt your web traffic" was "Flexible"
+      # meaning that the "Encrypts traffic between the browser and Cloudflare"
+      # NOTE: encryption provided from user's browser to cloudflare CDN only.
+      # NOTE: the encryption between cloudflare to my server is disabled becase the error
+      # level=error msg="Unable to obtain ACME certificate for domains \"whoami.louislabs.com\": unable to generate a certificate for the domains [whoami.louislabs.com]: 
+      # error: one or more domains had a problem:\n[whoami.louislabs.com] acme: error: 403 :: urn:ietf:params:acme:error:unauthorized :: Cannot negotiate ALPN protocol \"acme-tls/1\" for tls-alpn-01 challenge\n" rule="Host(`whoami.louislabs.com`)" providerName=myresolver.acme ACME CA="https://acme-staging-v02.api.letsencrypt.org/directory" routerName=whoami-louislabs-https@docker
 
   whoami-louislabs:
     image: 'traefik/whoami'
     restart: unless-stopped
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.whoami-louislabs-http.rule=Host(`whoami.louislabs.com`)'
-      - 'traefik.http.routers.whoami-louislabs-http.entrypoints=web'
-      - 'traefik.http.routers.whoami-louislabs-http.middlewares=whoami-louislabs-https'
-      - 'traefik.http.middlewares.whoami-louislabs-https.redirectscheme.scheme=https'
-      - 'traefik.http.routers.whoami-louislabs-https.rule=Host(`whoami.louislabs.com`)'
-      - 'traefik.http.routers.whoami-louislabs-https.entrypoints=websecure'
-      - 'traefik.http.routers.whoami-louislabs-https.tls.certresolver=myresolver'
-    # depends_on:
-    #   - traefik
+      - "traefik.enable=true"
+
+      - "traefik.http.routers.whoami-louislabs-http.rule=Host(`whoami.louislabs.com`)"
+      - "traefik.http.routers.whoami-louislabs-http.entrypoints=web"
+
+      # NOTE: container serving 8080 port
+      - "traefik.http.services.whoami-louislabs-http.loadbalancer.server.port=8080"
+
+  whoami-iamon99:
+    image: 'traefik/whoami'
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.routers.whoami-iamon99-http.rule=Host(`whoami.iamon99.com`)"
+      - "traefik.http.routers.whoami-iamon99-http.entrypoints=web"
+
+      # NOTE: container serving 8080 port
+      - "traefik.http.services.whoami-iamon99-http.loadbalancer.server.port=8080"
 
   wss-test-host:
     build: wss-test-host
@@ -72,15 +73,22 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.helloworld-ws.rule=Host(`wss.louislabs.com`)"
-      - 'traefik.http.routers.helloworld-ws.entrypoints=web'
-      - 'traefik.http.routers.helloworld-ws.middlewares=helloworld-wss'
-      - 'traefik.http.middlewares.helloworld-wss.redirectscheme.scheme=https'
+      - "traefik.http.routers.helloworld-ws.entrypoints=web"
 
-      - 'traefik.http.routers.helloworld-wss.rule=Host(`wss.louislabs.com`)'
-      - 'traefik.http.routers.helloworld-wss.entrypoints=websecure'
-      - 'traefik.http.routers.helloworld-wss.tls.certresolver=myresolver'
+      # NOTE: container serving 3000 port
+      - "traefik.http.services.helloworld-ws.loadbalancer.server.port=3000"
 
-      - "traefik.tcp.services.helloworld-wss.loadbalancer.server.port=3000"
+  #     - "traefik.http.routers.helloworld-ws.middlewares=helloworld-wss"
+  #     - "traefik.http.middlewares.helloworld-wss.redirectscheme.scheme=https"
+
+  #     - "traefik.http.routers.helloworld-wss.rule=Host(`wss.louislabs.com`)"
+  #     - "traefik.http.routers.helloworld-wss.entrypoints=websecure"
+
+  #     # NOTE: container serving 3000 port
+  #     - "traefik.http.services.helloworld-ws.loadbalancer.server.port=3000"
+
+  #     # related to the provider at traefik container
+  #     - "traefik.http.routers.helloworld-wss.tls.certresolver=myresolver"
 
 networks:
   default:
