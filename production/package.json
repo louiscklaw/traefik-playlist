@@ -11,7 +11,7 @@
     "docker_compose_kill": "docker compose kill",
     "docker_compose_rm": "docker compose rm -s -v -f",
     "docker_compose_up": "docker network create traefik-proxy-network || true && docker compose up -d",
-    "docker_rebuild": "docker compose up -d --build",
+    "docker_rebuild": "docker compose up -d",
     "docker_stop": "docker compose down",
     "gitUpdate": "git add . && git commit -m \"update traefik-production,\""
   },

@@ -17,7 +17,7 @@ services:
       - "8080:8080"
       
     command:
-      - --log.level=INFO
+      - --log.level=DEBUG
       - --global.checkNewVersion=true
       - --global.sendAnonymousUsage=false
 
@@ -83,7 +83,12 @@ services:
   #     # related to the provider at traefik container
   #     - "traefik.http.routers.helloworld-wss.tls.certresolver=myresolver"
 
+# networks:
+#   default:
+#     external:
+#       name: traefik-proxy-network
+
 networks:
   default:
-    external:
-      name: traefik-proxy-network
+    name: traefik-proxy-network
+    external: true
