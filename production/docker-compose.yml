@@ -5,16 +5,10 @@ services:
     image: 'traefik:v2.10'
     container_name: 'traefik'
     restart: unless-stopped
-    environment:
-      # https://go-acme.github.io/lego/dns/cloudflare/#credentials
-      - CLOUDFLARE_EMAIL=louiscklaw@gmail.com
-      - CLOUDFLARE_DNS_API_TOKEN=832e9ced6f77bc77b6c304e3e0085f009aa4e
-
+    env_file: ./.env
     volumes:
       # - "./volumes/letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-
-
     ports:
       # servicing port http 80, https 443,
       - "80:80"
@@ -47,24 +41,22 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-
       - "traefik.http.routers.whoami-louislabs-http.rule=Host(`whoami.louislabs.com`)"
       - "traefik.http.routers.whoami-louislabs-http.entrypoints=web"
 
-      # NOTE: container serving 8080 port
-      - "traefik.http.services.whoami-louislabs-http.loadbalancer.server.port=8080"
+      # NOTE: container serving 80 port
+      - "traefik.http.services.whoami-louislabs-http.loadbalancer.server.port=80"
 
   whoami-iamon99:
     image: 'traefik/whoami'
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-
       - "traefik.http.routers.whoami-iamon99-http.rule=Host(`whoami.iamon99.com`)"
       - "traefik.http.routers.whoami-iamon99-http.entrypoints=web"
 
-      # NOTE: container serving 8080 port
-      - "traefik.http.services.whoami-iamon99-http.loadbalancer.server.port=8080"
+      # NOTE: container serving 80 port
+      - "traefik.http.services.whoami-iamon99-http.loadbalancer.server.port=80"
 
   wss-test-host:
     build: wss-test-host
