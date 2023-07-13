@@ -17,7 +17,7 @@ services:
       - "8080:8080"
       
     command:
-      - --log.level=DEBUG
+      - --log.level=INFO
       - --global.checkNewVersion=true
       - --global.sendAnonymousUsage=false
 
